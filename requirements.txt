@@ -1,0 +1,11 @@
+typer[all]
+pandas
+numpy
+matplotlib
+seaborn
+httpx
+python-dotenv
+google-generativeai
+openai
+pyyaml
+tabulate

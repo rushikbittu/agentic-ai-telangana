@@ -1,0 +1,14 @@
+dataset_source:
+  type: "file"
+  location: "TG Rainfall data June 2025.csv"
+
+scope:
+  filters: {}
+
+llm:
+  llm:
+  model: "gemini-1.5-flash"
+
+  temperature: 0.7
+
+export_formats: ["ascii", "csv", "markdown", "png"]
