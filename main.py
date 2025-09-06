@@ -1,18 +1,20 @@
 import typer
 import yaml
-from agents import ingestion, standardization, cleaning, transformation, insights, llm_agent, logging_agent
 import os
 from datetime import datetime
+from agents import llm_agent, logging_agent
 from agents.provenance import save_run_metadata
+from agents.orchestrator import Orchestrator  # NEW Orchestrator agent
 
 app = typer.Typer()
 
 @app.command()
 def run_pipeline(config_path: str):
-
+    # Load config
     with open(config_path) as f:
         config = yaml.safe_load(f)
 
+    # Prepare output directory
     today = datetime.now().strftime("%Y-%m-%d")
     output_dir = os.path.join("run_artifacts", today)
     os.makedirs(output_dir, exist_ok=True)
@@ -24,30 +26,25 @@ def run_pipeline(config_path: str):
     save_run_metadata(output_dir, config_path, dataset_file, llm_model)
     logging_agent.log_event("Saved run metadata", output_dir)
 
-    raw_path = ingestion.load_dataset(config["dataset_source"], output_dir)
-    logging_agent.log_event(f"Ingested data at {raw_path}", output_dir)
+    # Initialize orchestrator
+    llm = llm_agent.LLMAgent(model_name=llm_model)
+    orchestrator = Orchestrator(llm, output_dir, config)
 
-    std_path = standardization.standardize_data(raw_path, output_dir)
-    logging_agent.log_event(f"Standardized data saved at {std_path}", output_dir)
+    typer.echo("🚀 Running agentic pipeline with dynamic orchestration...\n")
+    transformed_df = orchestrator.run_pipeline()
 
-    clean_path = cleaning.clean_data(std_path, config, output_dir)
-    logging_agent.log_event(f"Cleaned data saved at {clean_path}", output_dir)
+    typer.echo("\n✅ Pipeline complete! Enter 'exit' to quit natural language Q&A.")
 
-    transformed_path = transformation.transform_data(clean_path, config, output_dir)
-    logging_agent.log_event(f"Transformed data saved at {transformed_path}", output_dir)
-
-    summary_md, plot_path = insights.generate_insights(transformed_path, config, output_dir)
-    logging_agent.log_event(f"Insights generated, summary: {summary_md}, plot: {plot_path}", output_dir)
-
-    typer.echo("\nPipeline complete! Enter 'exit' to quit natural language Q&A.")
+    # Interactive goal-driven Q&A
     while True:
-        user_q = typer.prompt("Ask a question about the data")
+        user_q = typer.prompt("\nAsk a question about the data")
         if user_q.lower() in ["exit", "quit"]:
             break
-        answer = llm_agent.answer_question(user_q, transformed_path, config)
-        typer.echo(f"LLM Answer:\n{answer}\n")
+        answer = orchestrator.handle_query(user_q, transformed_df)
+        typer.echo(f"\n🤖 LLM Answer:\n{answer}\n")
 
     logging_agent.log_event("Run completed", output_dir)
+
 
 if __name__ == "__main__":
     app()

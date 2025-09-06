@@ -1,6 +1,6 @@
 dataset_source:
   type: "file"
-  location: "TG Rainfall data June 2025.csv"
+  location: "TG-SPDCL_consumption_detail_industrial_04_2025.csv"
 
 scope:
   filters: {}
