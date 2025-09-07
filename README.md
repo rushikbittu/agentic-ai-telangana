@@ -54,3 +54,33 @@ pip install -r requirements.txt
 **Set up environment variables (.env):**
   - GEMINI_API_KEY=your_api_key_here
 
+**How to Run**
+  - Place your dataset (CSV file) in the project folder OR configure it in config.yaml
+  - Run the pipeline: python main.py config.yaml
+  - Generated artifacts will be saved in: run_artifacts
+  - After pipeline completion, enter interactive mode: Ask a question about the data: What is the dataset about?
+  
+
+## Project Structure
+ agentic-ai-telangana/
+│── agents/
+│   ├── ingestion.py
+│   ├── standardization.py
+│   ├── cleaning.py
+│   ├── transformation.py
+│   ├── insights.py
+│   ├── llm_agent.py
+│   ├── orchestrator.py   
+│   ├── logging_agent.py
+│   └── provenance.py
+│── run_artifacts/
+│── main.py
+│── config.yaml
+│── requirements.txt
+│── README.md
+│── .env
+   
+
+
+
+
