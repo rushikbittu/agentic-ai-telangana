@@ -19,7 +19,7 @@ def _detect_datetime_columns(df):
             candidates.append(col)
             continue
 
-        # Content-based heuristic: Check samples for date-like pattern
+        
         non_null_series = df[col].dropna()
         if len(non_null_series) == 0:
             continue
@@ -34,7 +34,7 @@ def _detect_datetime_columns(df):
 
 def ingest_file(filepath):
     if filepath.endswith('.csv'):
-        # Try delimiters commonly used (comma, tab, semicolon, space)
+        
         for delim in [',', '\t', ';', ' ']:
             try:
                 df = pd.read_csv(filepath, delimiter=delim)
@@ -52,13 +52,13 @@ def ingest_file(filepath):
 def standardize_data(raw_path, output_dir):
     df = ingest_file(raw_path)
 
-    # Standardize column names
+  
     original_cols = list(df.columns)
     std_cols = [c.strip().lower().replace(' ', '_') for c in original_cols]
     schema_map = dict(zip(original_cols, std_cols))
     df.columns = std_cols
 
-    # Parse and enrich datetime columns
+   
     parsed_dates = []
     for col in _detect_datetime_columns(df):
         s = pd.to_datetime(df[col], errors='coerce', infer_datetime_format=True)
@@ -67,15 +67,14 @@ def standardize_data(raw_path, output_dir):
             df[f"{col}_yyyy_mm"] = s.dt.to_period("M").astype(str)
             parsed_dates.append(col)
 
-    # Save standardized dataset
     std_path = os.path.join(output_dir, "standardized.csv")
     df.to_csv(std_path, index=False)
 
-    # Save schema mapping
+   
     with open(os.path.join(output_dir, "schema_map.json"), "w", encoding="utf-8") as f:
         json.dump(schema_map, f, ensure_ascii=False, indent=2)
 
-    # Save summary markdown
+
     summary_md_path = os.path.join(output_dir, "02_standardization_summary.md")
     with open(summary_md_path, "w", encoding="utf-8") as f:
         f.write("# Standardization Summary\n\n")
