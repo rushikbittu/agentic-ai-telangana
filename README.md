@@ -34,3 +34,23 @@ This system ingests **public datasets from the Telangana Open Data Portal**, dyn
 
 - **Interactive Q&A**  
   After the pipeline runs, you can ask natural language questions:  
+
+
+---
+
+##  Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/rushikbittu/agentic-ai-telangana.git
+cd agentic-ai-telangana
+pip install -r requirements.txt
+
+
+**Install dependencies:**
+  - pip install -r requirements.txt
+
+**Set up environment variables (.env):**
+  - GEMINI_API_KEY=your_api_key_here
+
