@@ -1,1 +1,36 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+
+# Virtual environment
 .env
+.venv/
+env/
+venv/
+ENV/
+
+# Local config
+*.env
+config_local.yaml
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs & artifacts
+*.log
+run_artifacts/
+logs/
+*.json
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
