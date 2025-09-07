@@ -1,3 +1,5 @@
+# vedio link : https://drive.google.com/file/d/1x0dJaRUPuAmVoDnI3rAlp0CtCIWVTmaK/view?usp=sharing
+
 #  Agentic AI Telangana
 
 A **Real-Time Governance System (RTGS)** for policymakers in Telangana, powered by **agentic AI**.  
@@ -80,6 +82,7 @@ pip install -r requirements.txt
 │── README.md
 │── .env
    
+
 
 
 
